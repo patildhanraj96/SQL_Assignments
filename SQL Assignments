@@ -1,0 +1,193 @@
+SQL Queries/ Assignment 
+
+                                                                    Assignment 1:  
+topics covered- table creation, Clauses, Operators 
+
+create database emp ;
+use emp;
+
+create table if not exists employee (
+emp_id     varchar(50) NOT NULL ,
+emp_name   varchar(50) NOT NULL,
+salary     int         NOT NULL,
+dept_id    varchar(50) NOT NULL,
+manager_id varchar(50) NOT NULL
+);
+
+create table if not exists department (
+dept_id     varchar(50) NOT NULL ,
+dept_name   varchar(50) NOT NULL
+);
+
+
+create table if not exists manager (
+manager_id     varchar(50) NOT NULL ,
+manager_name   varchar(50) NOT NULL,
+dept_id        varchar(50) NOT NULL
+);
+
+create table if not exists projects (
+project_id      varchar(50) NOT NULL,
+project_name    varchar(50) NOT NULL,
+team_member_id  varchar(50) NOT NULL);
+
+insert into employee values   ('E1', 'Rahul', 15000, 'D1', 'M1'),
+			           ('E2', 'Manoj', 15000, 'D1', 'M1'),
+				('E3', 'James' ,'55000', 'D2', 'M2'),
+				('E4', 'Micheal', 25000, 'D2', 'M2'),
+				('E5', 'Ali', 20000 ,'D10', 'M3'),
+				('E6' ,'Robin', 35000 ,'D10' ,'M3'),
+                                                ('E7', 'Rahul', 25000, 'D3', 'M1'),
+				 ('E1', 'Rahul', 15000, 'D1', 'M1');
+                            
+insert into department values ('D1', 'IT'),('D2', 'HR'),
+                                              ('D3', 'Finance'),('D4','Admin');
+                              
+insert into projects values ('P1', 'Data Migration', 'E1'), ('P1', 'Data Migration','E2'),
+                                          ('P1', 'Data Migration', 'M3'),('P2', 'ETL Tool', 'E1'),
+                                          ('P2', 'ETL Tool', 'M4');
+
+                           
+Fetch the employees who earn less than average salary of all employees
+
+select emp_name,salary,avg(salary) from employee
+having salary < avg(salary);
+
+Write a query to retrieve the first four characters of  Emp_name from the Employee table.
+
+           SELECT SUBSTRING(Emp_name, 1, 4) FROM Employee;
+
+Write a query to find all the employees whose salary is between 50000 to 100000.
+
+           SELECT * FROM Employee WHERE Salary BETWEEN '10000' AND '55000';
+
+ Write a query to find the names of employees that begin with ‘S’
+            
+           SELECT * FROM Employee WHERE Emp_name LIKE 'm%';
+
+ Write a query to fetch top N records of salary.
+
+           SELECT * FROM Employee ORDER BY Salary DESC LIMIT 5;
+
+ Write a query to retrieve the Emp_name and SALARY in a single column as “EmpSalry”.
+
+             SELECT CONCAT(Emp_name, ' ', Salary) AS 'EmpSalary' FROM Employee;
+
+Write a query to fetch all the records from the Employee table ordered by Emp_name in descending order and Department in the ascending order.
+             
+            SELECT * FROM Employee ORDER BY Emp_name desc, dept_id asc;
+
+ Write a query to fetch details of employees whose EmpLname ends with an alphabet ‘A’ and contains five alphabets.
+
+            SELECT * FROM Employee WHERE Emp_name LIKE '____j';
+
+Write a query to fetch details of all employees excluding the employees with names, “rahul” and “manoj” from the Employee table.
+
+            SELECT * FROM Employee WHERE Emp_name NOT IN ('Rahul','Manoj');
+
+ Write a query to fetch the department-wise count of employees sorted by department’s count in ascending order.
+
+           SELECT Dept_id, count(Emp_id) AS EmpDeptCount 
+           FROM Employee GROUP BY Dept_id
+           ORDER BY EmpDeptCount ASC;
+
+ Write a query to retrieve duplicate records from a table.
+
+            SELECT Emp_ID, Emp_name, Dept_id ,COUNT(*) 
+            FROM Employee GROUP BY Emp_ID, Emp_name, Dept_id
+            HAVING COUNT(*) > 1;
+
+ Write a query to retrieve the list of employees working in the same department.
+
+           Select DISTINCT E.Emp_name, E.Dept_id,D.dept_name
+            FROM Employee E , department D 
+           WHERE E.Dept_id = D.Dept_id;
+
+ Write a query to retrieve the last 3 records from the EmployeeInfo table.
+
+            SELECT * FROM employee ORDER BY emp_id DESC LIMIT 3;
+
+  Write a query to find the third-highest salary from the EmpPosition table.
+              SELECT * FROM(SELECT emp_name, salary, DENSE_RANK() OVER(ORDER BY salary                DESC)R FROM employee) employee 
+              WHERE R= 3;
+
+ Write a query to retrieve Departments who have greater than 1 employee working in it. SELECT dept_id, COUNT(Emp_ID) FROM Employee
+            GROUP BY dept_id  HAVING COUNT(Emp_ID) > 1;
+
+Write a query to retrieve EmpPostion along with total salaries paid for each of them.
+
+          SELECT dept_id, SUM(Salary) from employee GROUP BY dept_id;
+
+                                                                      
+                                                                Assignment 2   (Joins)                     
+
+Please visit the website below and start performing queries as per question given below. This website is SQL editor of W3 and has its own databases.
+
+https://www.w3schools.com/sql/trysql.asp?filename=trysql_asc
+
+Question 1: Find Top 5 Product based on their SaleValue for the Month of August in Year 1996
+Answer:
+         SELECT P.ProductName,P.ProductID,O.Orderdate,OD.quantity*P.Price AS SALE_VALUE
+         FROM Products P
+         JOIN Orderdetails OD ON P.ProductID=OD.ProductID
+         JOIN Orders O ON O.OrderID=OD.OrderID
+         WHERE Orderdate BETWEEN '1996-08-01' AND '1996-08-31' 
+         ORDER BY SALE_VALUE DESC
+         LIMIT 5;
+
+Question 2: Find Top 5 Product based on their SaleValue. Display all information of Product including category details, supplier details and TotalSalesValue(Exclude all Id columns except for Product).
+Answer:  
+         SELECT P.ProductName,P.ProductID,OD.quantity*P.Price AS SALE_VALUE,P.Unit,C.CategoryName,C.Description,S.SupplierName,S.ContactName,S.Address,S.City,S.PostalCode,S.Country,S.Phone
+         FROM Products P
+         JOIN Orderdetails OD ON OD.ProductID=P.ProductID
+         JOIN Categories C  ON C.CategoryID=P.CategoryID
+         JOIN Suppliers S ON S.SupplierID=P.SupplierID
+         GROUP BY P.Productname
+         ORDER BY SALE_VALUE DESC LIMIT 5;
+Question 3: Find Top 5 Supplier based on their Sales Value. Display all Information of supplier and their sale value.
+Answer: 
+         SELECT S.SupplierName,P.ProductName,P.ProductID,OD.quantity*P.Price AS SALE_VALUE
+         FROM Products P
+         JOIN ORDERDETAILS OD ON P.ProductID=OD.ProductID
+         JOIN Suppliers S ON S.SupplierID=P.SupplierID
+         GROUP BY SupplierName
+         ORDER BY SALE_VALUE DESC
+         LIMIT 5
+ 
+Question 4: Find all information of shippers with their order delivery count.
+Answer: 
+         SELECT o.ShipperID,s.ShipperName,s.Phone,count(o.shipperid) as order_delivery_count
+         FROM Orders o
+         join shippers s on o.shipperid=s.shipperid 
+         group by o.shipperid
+
+Question 5: Find Top 5 Employees based on number of order they handled. Display all information of employees with order count.
+Answer:  
+         SELECT E.EmployeeID,E.LastName,E.FirstName,E.BirthDate,E.Photo,E.Notes, COUNT   (DISTINCT O.OrderID) AS NO_OF_ORDERS
+         FROM Employees E
+         JOIN Orders O ON E.EmployeeID=O.EmployeeID
+         GROUP BY E.EMPLOYEEID
+         order by no_of_orders desc
+         limit 5;
+
+Question 6: Find Top 5 Customers for Beverages based on their total purchase value.
+Answer: SELECT  CT.CategoryName,C.CustomerName,C.CustomerID,P.ProductName,P.ProductID,OD.quantity*P.Price AS TOTAL_PURCHASE_VALUE,O.CustomerID
+         FROM Products P
+         JOIN Orderdetails OD ON OD.ProductID=P.ProductID
+         JOIN Orders O ON O.OrderID=OD.OrderID
+         JOIN Categories CT ON CT.CategoryID=P.CategoryID
+         JOIN Customers C ON C.CustomerID=O.CustomerID
+         WHERE CT.CategoryName='Beverages'
+         ORDER BY TOTAL_PURCHASE_VALUE DESC  LIMIT 5 ;
+
+Question 7: Find Top 5 Customers based on their total purchase value.
+Answer:  
+         SELECT C.CustomerID,C.CustomerName,P.ProductName,P.ProductID,OD.quantity*P.Price AS        TOTAL_PURCHASE_VALUE
+         FROM Products P
+         JOIN Orderdetails OD ON OD.ProductID=P.ProductID
+         JOIN Orders O ON O.OrderID=OD.OrderID
+         JOIN Customers C ON C.CustomerID=O.CustomerID
+         ORDER BY TOTAL_PURCHASE_VALUE DESC
+         LIMIT 5
+
+
