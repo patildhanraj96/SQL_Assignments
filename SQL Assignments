@@ -1,7 +1,7 @@
-SQL Queries/ Assignment 
+                                                                   SQL Queries/ Assignment 
 
                                                                     Assignment 1:  
-topics covered- table creation, Clauses, Operators 
+                                                        topics covered- table creation, Clauses, Operators 
 
 create database emp ;
 use emp;
