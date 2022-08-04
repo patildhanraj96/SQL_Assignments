@@ -1,7 +1,7 @@
-                                                                   SQL Queries/ Assignment 
+SQL Queries/ Assignment 
 
-                                                                    Assignment 1:  
-                                                        topics covered- table creation, Clauses, Operators 
+Assignment 1:  
+topics covered- table creation, Clauses, Operators 
 
 create database emp ;
 use emp;
@@ -36,12 +36,18 @@ insert into employee values   ('E1', 'Rahul', 15000, 'D1', 'M1'),
 				('E3', 'James' ,'55000', 'D2', 'M2'),
 				('E4', 'Micheal', 25000, 'D2', 'M2'),
 				('E5', 'Ali', 20000 ,'D10', 'M3'),
-				('E6' ,'Robin', 35000 ,'D10' ,'M3'),
-                                                ('E7', 'Rahul', 25000, 'D3', 'M1'),
-				 ('E1', 'Rahul', 15000, 'D1', 'M1');
-                            
-insert into department values ('D1', 'IT'),('D2', 'HR'),
-                                              ('D3', 'Finance'),('D4','Admin');
+				('E6' ,'Robin', 35000 ,'D10' ,'M3'),                                                                            
+
+insert into department values ('D1', 'IT'),
+		              ('D2', 'HR'),
+                               ('D3', 'Finance'),
+				('D4','Admin');
+
+ insert into manager values ('M1', 'Prem', 'D3'),
+        	 	     ('M2', 'Shripadh','D4'),
+                             ('M3', 'Nick', 'D1'),
+        		      ('M4', 'Cory', 'D1'); 
+
                               
 insert into projects values ('P1', 'Data Migration', 'E1'), ('P1', 'Data Migration','E2'),
                                           ('P1', 'Data Migration', 'M3'),('P2', 'ETL Tool', 'E1'),
@@ -50,76 +56,132 @@ insert into projects values ('P1', 'Data Migration', 'E1'), ('P1', 'Data Migrati
                            
 Fetch the employees who earn less than average salary of all employees
 
-select emp_name,salary,avg(salary) from employee
-having salary < avg(salary);
+	select emp_name,salary,avg(salary) from employee
+	having salary < avg(salary);
 
 Write a query to retrieve the first four characters of  Emp_name from the Employee table.
-
-           SELECT SUBSTRING(Emp_name, 1, 4) FROM Employee;
+         
+ 	 select substring(emp_name, 1, 4) from employee;
 
 Write a query to find all the employees whose salary is between 50000 to 100000.
 
-           SELECT * FROM Employee WHERE Salary BETWEEN '10000' AND '55000';
+           select * from employee where salary between '10000' and '55000';
 
  Write a query to find the names of employees that begin with ‘S’
             
-           SELECT * FROM Employee WHERE Emp_name LIKE 'm%';
+               select * from employee where emp_name like 'm%';
 
  Write a query to fetch top N records of salary.
 
-           SELECT * FROM Employee ORDER BY Salary DESC LIMIT 5;
-
+     	    select * from employee order by salary desc limit 5;
+	    
  Write a query to retrieve the Emp_name and SALARY in a single column as “EmpSalry”.
 
-             SELECT CONCAT(Emp_name, ' ', Salary) AS 'EmpSalary' FROM Employee;
+             select concat(emp_name, ' ', salary) as 'empsalary' from employee;
+
 
 Write a query to fetch all the records from the Employee table ordered by Emp_name in descending order and Department in the ascending order.
              
-            SELECT * FROM Employee ORDER BY Emp_name desc, dept_id asc;
+            select * from employee order by emp_name desc, dept_id asc;
 
  Write a query to fetch details of employees whose EmpLname ends with an alphabet ‘A’ and contains five alphabets.
 
-            SELECT * FROM Employee WHERE Emp_name LIKE '____j';
+            select * from employee where emp_name like '____j';
+
 
 Write a query to fetch details of all employees excluding the employees with names, “rahul” and “manoj” from the Employee table.
 
-            SELECT * FROM Employee WHERE Emp_name NOT IN ('Rahul','Manoj');
+             select * from employee where emp_name not in ('rahul','manoj');
+
 
  Write a query to fetch the department-wise count of employees sorted by department’s count in ascending order.
 
-           SELECT Dept_id, count(Emp_id) AS EmpDeptCount 
-           FROM Employee GROUP BY Dept_id
-           ORDER BY EmpDeptCount ASC;
+           select dept_id, count(emp_id) as empdeptcount 
+           from employee group by dept_id
+           order by empdeptcount asc;
 
- Write a query to retrieve duplicate records from a table.
 
-            SELECT Emp_ID, Emp_name, Dept_id ,COUNT(*) 
-            FROM Employee GROUP BY Emp_ID, Emp_name, Dept_id
-            HAVING COUNT(*) > 1;
+ Write a query to retrieve duplicate records from a table. (note- records not added in table)
+
+            select emp_id, emp_name, dept_id ,count(*) 
+            from employee group by emp_id, emp_name, dept_id        
+	    having count(*) > 1;
 
  Write a query to retrieve the list of employees working in the same department.
 
-           Select DISTINCT E.Emp_name, E.Dept_id,D.dept_name
-            FROM Employee E , department D 
-           WHERE E.Dept_id = D.Dept_id;
+              select distinct e.emp_name, e.dept_id,d.dept_name
+  	     from employee e , department d  where e.dept_id = d.dept_id;
 
  Write a query to retrieve the last 3 records from the EmployeeInfo table.
 
-            SELECT * FROM employee ORDER BY emp_id DESC LIMIT 3;
+              select * from employee order by emp_id desc limit 3;
 
   Write a query to find the third-highest salary from the EmpPosition table.
-              SELECT * FROM(SELECT emp_name, salary, DENSE_RANK() OVER(ORDER BY salary                DESC)R FROM employee) employee 
-              WHERE R= 3;
 
- Write a query to retrieve Departments who have greater than 1 employee working in it. SELECT dept_id, COUNT(Emp_ID) FROM Employee
-            GROUP BY dept_id  HAVING COUNT(Emp_ID) > 1;
+ 	select * from(select emp_name, salary, dense_rank() over(order by salary desc) r from   employee) employee 
+ 	where r= 3;
+
+
+ Write a query to retrieve Departments who have greater than 1 employee working in it.         
+           select dept_id, count(emp_id) from employee
+           group by dept_id  having count(emp_id) > 1;
+
 
 Write a query to retrieve EmpPostion along with total salaries paid for each of them.
 
-          SELECT dept_id, SUM(Salary) from employee GROUP BY dept_id;
+             select dept_id, sum(salary) from employee group by dept_id;
+                                                     
+ *********************
 
-                                                                      
-                                                                Assignment 2   (Joins)                     
+ Assignment 2   (Joins)                     
+
+fetch the employee name and the department name they belong to.
+
+           select e.emp_name, d.dept_name
+           from employee e
+            join department d on e.dept_id = d.dept_id; 
+
+fetch all employee name and their department name
+
+          select e.emp_name, d.dept_name
+          from employee e
+         left join department d on e.dept_id = d.dept_id; 
+
+Fetch all department and their employee name
+
+	select e.emp_name, d.dept_name
+	from employee e
+	right join department d on e.dept_id = d.dept_id; 
+
+Fetch details of all employee, their manager, their department and the project  they work on; inner join 
+
+	select e.emp_id,e.emp_name, d.dept_name, m.manager_name, p.project_name
+	from employee e
+	left join department d on e.dept_id = d.dept_id
+	inner join manager m on m.manager_id =  e.manager_id
+	left join projects p on p.team_member_id= e.emp_id;
+
+
+Full join or union 
+
+	select e.emp_name, d.dept_name
+	from employee e
+	left join department d on e.dept_id = d.dept_id
+	Union
+	select e.emp_name, d.dept_name
+	from employee e
+	right join department d on e.dept_id = d.dept_id;
+
+Cross join ( Every record with tables will match with each other)
+	select e.emp_name, d.dept_name
+	from employee e
+	cross join department d ;
+
+Natural join 
+	select e.emp_name, d.dept_name
+	from employee e
+	natural join department d ;
+
 
 Please visit the website below and start performing queries as per question given below. This website is SQL editor of W3 and has its own databases.
 
@@ -144,6 +206,10 @@ Answer:
          JOIN Suppliers S ON S.SupplierID=P.SupplierID
          GROUP BY P.Productname
          ORDER BY SALE_VALUE DESC LIMIT 5;
+
+
+
+
 Question 3: Find Top 5 Supplier based on their Sales Value. Display all Information of supplier and their sale value.
 Answer: 
          SELECT S.SupplierName,P.ProductName,P.ProductID,OD.quantity*P.Price AS SALE_VALUE
